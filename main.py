@@ -17,34 +17,48 @@ while True:
     print("8. Поиск читателя")
     print("9. Выйти")
 
-    ans = int(input())
+    try:
+        ans = int(input())
+    except ValueError:
+        print("Похоже, вы ввели не целочисленное число. Попробуйте ещё раз")
+        continue 
 
     if ans == 1:
         title = input("Введите название книги: ")
         author = input("Введите имя автора: ")
-        year = int(input("Введите год публикации книги: "))
-        isbn = len(title) + len(author) + year
-        library.add_book(Book(title, author, year, isbn))
+        year = input("Введите год публикации книги: ")
+        library.add_book(Book(title, author, year))
         print("Книга успешно добавлена")
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
         continue
     elif ans == 2:
-        isbn = int(input("Введите уникальный номер книги: "))
-        library.remove_book(isbn)
+        try:
+            id = int(input("Введите уникальный номер книги: "))
+        except ValueError:
+            print("Похоже, вы ввели не целочисленное число. Возврат на главный экран")
+            continue
+        library.remove_book(id)
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
         continue
     elif ans == 3:
         name = input("Введите ФИО читателя: ")
-        card_number = len(name)
-        library.register_reader(Reader(name, card_number))
+        library.register_reader(Reader(name))
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
     elif ans == 4:
-        card_number = int(input("Введите уникальный номер читателя: "))
-        library.remove_reader(card_number)
+        try:
+            id = int(input("Введите уникальный номер читателя: "))
+        except ValueError:
+            print("Похоже, вы ввели не целочисленное число. Возврат на главный экран")
+            continue
+        library.remove_reader(id)
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
     elif ans == 5:
-        card_number = int(input("Введите уникальный номер читателя: "))
-        isbn = int(input("Введите уникальный номер книги: "))
+        try:
+            card_number = int(input("Введите уникальный номер читателя: "))
+            isbn = int(input("Введите уникальный номер книги: "))
+        except ValueError:
+            print("Похоже, вы ввели не целочисленное число. Возврат на главный экран")
+            continue
         library.issue_book(card_number, isbn)
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
     elif ans == 6:
@@ -53,7 +67,7 @@ while True:
         library.return_book(card_number, isbn)
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
     elif ans == 7:
-        find_book = input("Введите ключевое слово: ")
+        find_book = input("Введите ключевое слово, либо оставьте поле пустым для получения списка всех книг: ")
         list_book = library.search_book(keyword=find_book)
         if not list_book:
             print("Данная книга не найдена")
@@ -62,10 +76,13 @@ while True:
                 print(book.description())
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
     elif ans == 8:
-        find_reader = input("Введите ключевое слово: ")
+        find_reader = input("Введите ключевое слово, либо оставьте поле пустым для получения списка всех читателей: ")
         list_reader = library.search_reader(keyword=find_reader)
-        for reader in list_reader:
-            print(reader.description())
+        if not list_reader:
+            print("Данный читатель не найден")
+        else:
+            for reader in list_reader:
+                print(reader.description())
         input("Нажмите на Enter, чтобы вернуться в меню выбора...")
     elif ans == 9:
         break
